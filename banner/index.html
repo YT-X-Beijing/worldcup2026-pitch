@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>平行宇宙 · 世界杯叙事Agent · 易拉宝</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#030d07;--surface:#0a1f10;--card:#0f2a16;
+  --border:rgba(255,255,255,0.07);
+  --gold:#F59E0B;--gold2:#FCD34D;
+  --t1:#f0fdf4;--t2:#86efac;--t4:#166534;
+}
+html,body{
+  min-height:100vh;background:var(--bg);color:var(--t1);
+  font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Noto Sans SC',sans-serif;
+  overflow-x:hidden;
+}
+.banner{
+  max-width:480px;margin:0 auto;min-height:100vh;
+  display:flex;flex-direction:column;
+  background:
+    radial-gradient(ellipse 80% 40% at 50% 0%,rgba(16,185,129,0.12) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 30% at 80% 100%,rgba(245,158,11,0.08) 0%,transparent 55%),
+    var(--bg);
+  position:relative;overflow:hidden;
+}
+.banner::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(16,185,129,0.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(16,185,129,0.035) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+.top{padding:44px 28px 24px;text-align:center;position:relative;z-index:1;flex-shrink:0}
+.top-badge{
+  display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:100px;
+  background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);
+  font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--gold);margin-bottom:22px;
+}
+.top-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.slogan-main{font-size:clamp(22px,5.5vw,34px);font-weight:900;line-height:1.2;letter-spacing:-.5px;margin-bottom:12px}
+.slogan-main .em{
+  background:linear-gradient(135deg,var(--gold2) 0%,var(--gold) 50%,#f97316 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;
+}
+.slogan-sub{font-size:13px;color:#6ee7b7;letter-spacing:.08em;line-height:1.6}
+/* FLOW */
+.flow-wrap{margin:16px 28px 0;z-index:1;position:relative;flex-shrink:0}
+.section-label{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--t4);margin-bottom:11px}
+.flow-row{display:flex;align-items:stretch;gap:6px}
+.fbox{
+  flex:1;padding:10px 8px;border-radius:10px;text-align:center;
+  background:var(--card);border:1px solid var(--border);
+}
+.fbox.hi{border-color:rgba(245,158,11,0.35);background:rgba(245,158,11,0.06)}
+.fbox-icon{font-size:15px;line-height:1;margin-bottom:4px}
+.fbox-label{font-size:9.5px;color:var(--t2);line-height:1.4}
+.fbox-label b{color:var(--t1);display:block;font-size:10.5px}
+.farr{color:var(--t4);font-size:11px;flex-shrink:0;align-self:center}
+/* INPUT EXAMPLE */
+.example-box{
+  margin:14px 28px 0;padding:13px 16px;border-radius:12px;
+  background:rgba(16,185,129,0.04);border:1px solid rgba(16,185,129,0.14);
+  z-index:1;position:relative;flex-shrink:0;
+}
+.ex-label{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:7px}
+.ex-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.ex-tag{padding:4px 11px;border-radius:100px;font-size:11px;font-weight:600}
+.ex-tag.a{background:rgba(245,158,11,0.12);color:var(--gold2)}
+.ex-tag.b{background:rgba(52,211,153,0.12);color:#6ee7b7}
+.ex-tag.c{background:rgba(99,102,241,0.12);color:#a5b4fc}
+.ex-output{font-size:11.5px;color:#86efac;line-height:1.65;font-style:italic;border-left:2px solid rgba(245,158,11,0.3);padding-left:10px}
+/* CARDS */
+.middle{padding:16px 28px;display:flex;flex-direction:column;gap:10px;flex:1;z-index:1;position:relative}
+.card{
+  padding:14px 16px;border-radius:13px;
+  background:var(--card);border:1px solid var(--border);
+  position:relative;overflow:hidden;display:flex;gap:11px;align-items:flex-start;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--ca,rgba(245,158,11,0.4)),transparent);
+}
+.card.cg{--ca:rgba(245,158,11,0.5)}
+.card.cg2{--ca:rgba(52,211,153,0.4)}
+.card.cb{--ca:rgba(99,102,241,0.4)}
+.card-icon{
+  font-size:20px;flex-shrink:0;width:38px;height:38px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+}
+.card.cg .card-icon{background:rgba(245,158,11,0.1)}
+.card.cg2 .card-icon{background:rgba(52,211,153,0.1)}
+.card.cb .card-icon{background:rgba(99,102,241,0.1)}
+.card-title{font-size:13.5px;font-weight:700;margin-bottom:3px;color:var(--t1)}
+.card-desc{font-size:11px;line-height:1.6;color:#86efac}
+.ctag{
+  display:inline-flex;padding:2px 9px;border-radius:100px;
+  font-size:9px;font-weight:700;letter-spacing:.06em;margin-top:6px;
+}
+.card.cg .ctag{background:rgba(245,158,11,0.12);color:var(--gold2)}
+.card.cg2 .ctag{background:rgba(52,211,153,0.12);color:#6ee7b7}
+.card.cb .ctag{background:rgba(99,102,241,0.12);color:#a5b4fc}
+/* CTA */
+.bottom{padding:14px 28px 30px;display:flex;gap:17px;align-items:center;z-index:1;position:relative;flex-shrink:0}
+.qr-box{
+  flex-shrink:0;width:94px;height:94px;border-radius:12px;
+  background:var(--surface);border:1px solid rgba(245,158,11,0.25);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+}
+.qr-svg{width:62px;height:62px}
+.qr-label{font-size:9px;color:var(--gold);letter-spacing:.08em;font-weight:600}
+.cta-text{flex:1}
+.cta-headline{font-size:16px;font-weight:800;line-height:1.3;margin-bottom:6px}
+.cta-headline .hi{color:var(--gold2)}
+.cta-body{font-size:11px;color:#86efac;line-height:1.6;margin-bottom:10px}
+.vote-btn{
+  display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:100px;
+  background:linear-gradient(135deg,var(--gold),#f97316);
+  color:#1c0a00;font-size:12px;font-weight:800;letter-spacing:.04em;
+  box-shadow:0 4px 18px rgba(245,158,11,0.35);
+}
+.footer{
+  padding:11px 28px 20px;text-align:center;
+  border-top:1px solid var(--border);z-index:1;position:relative;flex-shrink:0;
+}
+.footer-brand{font-size:10px;color:var(--t4);letter-spacing:.1em}
+.footer-brand span{color:var(--gold);font-weight:700}
+</style>
+</head>
+<body>
+<div class="banner">
+
+  <div class="top">
+    <div class="top-badge">
+      <span class="dot"></span>
+      FIFA WORLD CUP 2026 · HACKATHON DEMO
+    </div>
+    <div class="slogan-main">
+      2026世界杯<br>
+      <span class="em">终局哨响，由你改写神话</span>
+    </div>
+    <div class="slogan-sub">三个参数，让 AI 为每场比赛写出另一种命运</div>
+  </div>
+
+  <!-- 产品工作流 -->
+  <div class="flow-wrap">
+    <div class="section-label">产品工作流</div>
+    <div class="flow-row">
+      <div class="fbox hi">
+        <div class="fbox-icon">💬</div>
+        <div class="fbox-label"><b>三元组输入</b>球员·事件·情绪</div>
+      </div>
+      <div class="farr">→</div>
+      <div class="fbox">
+        <div class="fbox-icon">🔍</div>
+        <div class="fbox-label"><b>联网检索</b>赛况+在地文化</div>
+      </div>
+      <div class="farr">→</div>
+      <div class="fbox">
+        <div class="fbox-icon">✍️</div>
+        <div class="fbox-label"><b>微小说</b>≤300字</div>
+      </div>
+      <div class="farr">→</div>
+      <div class="fbox hi">
+        <div class="fbox-icon">🖼️</div>
+        <div class="fbox-label"><b>长图</b>即时发布</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 输入示例 -->
+  <div class="example-box">
+    <div class="ex-label">输入示例</div>
+    <div class="ex-row">
+      <span class="ex-tag a">梅西</span>
+      <span class="ex-tag b">绝杀进球</span>
+      <span class="ex-tag c">情绪强度 9</span>
+    </div>
+    <div class="ex-output">"第89分钟，他停下来——不是因为腿沉，而是因为他突然记起了多年前第一次穿上10号球衣的那个傍晚……"</div>
+  </div>
+
+  <!-- 三张核心能力卡 -->
+  <div class="middle">
+    <div class="section-label">核心能力 · CORE TECH</div>
+    <div class="card cg">
+      <div class="card-icon">🧩</div>
+      <div>
+        <div class="card-title">三元组意图协议</div>
+        <div class="card-desc">情绪强度≥8 → 第一人称热血独白；5-7 → 伪纪实叙事；&lt;5 → 冷峻白描。一个参数，三种叙事人格。</div>
+        <div class="ctag">INTENT PROTOCOL</div>
+      </div>
+    </div>
+    <div class="card cg2">
+      <div class="card-icon">🌐</div>
+      <div>
+        <div class="card-title">事实打底·虚实共生</div>
+        <div class="card-desc">双路联网检索：赛况事实 + 举办城市在地文化。置信度不足的细节自动模糊化，平行宇宙有据可依。</div>
+        <div class="ctag">WEB GROUNDED</div>
+      </div>
+    </div>
+    <div class="card cb">
+      <div class="card-icon">🖼️</div>
+      <div>
+        <div class="card-title">情绪驱动多模态长图</div>
+        <div class="card-desc">情绪评分映射色彩/字重/行距，自动生成 1:1 方图 + 9:16 竖版长图，直出朋友圈/小红书格式。</div>
+        <div class="ctag">MULTIMODAL OUTPUT</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div class="qr-box">
+      <svg class="qr-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="18" height="18" rx="2" fill="none" stroke="#F59E0B" stroke-width="2.5"/>
+        <rect x="6" y="6" width="10" height="10" rx="1" fill="#FCD34D"/>
+        <rect x="44" y="2" width="18" height="18" rx="2" fill="none" stroke="#F59E0B" stroke-width="2.5"/>
+        <rect x="48" y="6" width="10" height="10" rx="1" fill="#FCD34D"/>
+        <rect x="2" y="44" width="18" height="18" rx="2" fill="none" stroke="#F59E0B" stroke-width="2.5"/>
+        <rect x="6" y="48" width="10" height="10" rx="1" fill="#FCD34D"/>
+        <rect x="24" y="4" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="30" y="4" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="36" y="4" width="4" height="4" rx=".5" fill="rgba(245,158,11,0.35)"/>
+        <rect x="24" y="10" width="4" height="4" rx=".5" fill="rgba(245,158,11,0.35)"/>
+        <rect x="30" y="10" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="36" y="10" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="24" y="16" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="36" y="16" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="4" y="24" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="16" y="24" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="24" y="24" width="4" height="4" rx=".5" fill="rgba(245,158,11,0.35)"/>
+        <rect x="30" y="24" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="42" y="24" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="50" y="24" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="16" y="30" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="30" y="30" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="56" y="30" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="4" y="36" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="10" y="36" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="30" y="36" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="42" y="36" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="56" y="36" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="24" y="44" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="36" y="44" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="50" y="44" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="36" y="50" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="44" y="50" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="24" y="56" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="30" y="56" width="4" height="4" rx=".5" fill="#F59E0B"/>
+        <rect x="50" y="56" width="4" height="4" rx=".5" fill="#F59E0B"/>
+      </svg>
+      <div class="qr-label">扫码体验</div>
+    </div>
+    <div class="cta-text">
+      <div class="cta-headline">每票都是一次<br><span class="hi">平行宇宙的入场券</span></div>
+      <div class="cta-body">你的一票，让世界杯拥有第二种剧本</div>
+      <div class="vote-btn">⚽ 请投下宝贵一票</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-brand">平行宇宙叙事Agent · <span>WorldCup 2026</span> · Powered by ERNIE 5.0</div>
+  </div>
+
+</div>
+</body>
+</html>

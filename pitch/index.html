@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>平行宇宙叙事Agent · WorldCup 2026 Pitch</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#020c05;--card:#0a1f10;--card2:#0f2a16;
+  --border:rgba(255,255,255,0.07);--borderhi:rgba(251,191,36,0.25);
+  --gold:#F59E0B;--gold2:#FCD34D;--gold3:#fef3c7;
+  --green:#10b981;--green2:#34d399;--green3:#6ee7b7;
+  --t1:#f0fdf4;--t2:#86efac;--t3:#166534;
+}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--t1);
+  font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Noto Sans SC',sans-serif}
+.deck{width:100vw;height:100vh;position:relative;overflow:hidden}
+.slide{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:56px 80px;
+  opacity:0;pointer-events:none;transition:opacity .4s ease,transform .4s ease;
+  transform:translateX(50px);
+}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.slide.exit-left{opacity:0;transform:translateX(-50px)}
+.slide::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(16,185,129,0.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(16,185,129,0.025) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+.nav{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:12px;z-index:100}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--t3);cursor:pointer;transition:all .2s}
+.dot.active{background:var(--gold);transform:scale(1.5)}
+.slide-num{position:fixed;top:22px;right:28px;font-size:11px;color:var(--t3);z-index:100;letter-spacing:.06em}
+.nav-hint{position:fixed;bottom:28px;right:28px;font-size:10px;color:var(--t3)}
+.slide-label{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:10px}
+.slide-title{font-size:36px;font-weight:900;line-height:1.15;margin-bottom:8px}
+.slide-title.grad{
+  background:linear-gradient(135deg,var(--gold3) 0%,var(--gold2) 40%,var(--gold) 70%,#f97316 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.slide-title.green{
+  background:linear-gradient(135deg,#f0fdf4 0%,var(--green3) 50%,var(--green2) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+/* S1 COVER */
+.s1-glow{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 55%,rgba(16,185,129,0.1) 0%,transparent 65%),
+    radial-gradient(ellipse 40% 35% at 20% 15%,rgba(245,158,11,0.07) 0%,transparent 60%);
+}
+.s1-tagline{font-size:15px;color:var(--green3);letter-spacing:.1em;margin-bottom:18px}
+.s1-title{
+  font-size:clamp(52px,6vw,78px);font-weight:900;letter-spacing:-2px;line-height:1.05;
+  background:linear-gradient(135deg,#f0fdf4 0%,var(--green3) 30%,var(--gold2) 65%,var(--gold) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:14px;
+}
+.s1-sub{font-size:19px;font-weight:300;color:var(--t2);letter-spacing:.05em;margin-bottom:32px}
+.s1-tags{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.s1-tag{
+  display:inline-flex;align-items:center;gap:6px;padding:7px 18px;
+  border:1px solid var(--borderhi);border-radius:100px;font-size:13px;color:var(--t2);
+}
+.s1-tag b{color:var(--t1);font-weight:600}
+/* S2 WHAT IS IT */
+.s2-wrap{width:100%;max-width:960px}
+.s2-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px;width:100%;margin-top:28px}
+.s2-side h3{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:16px}
+.input-demo{padding:20px;background:var(--card);border:1px solid var(--border);border-radius:14px}
+.input-demo .row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.itag{padding:5px 14px;border-radius:100px;font-size:13px;font-weight:600}
+.itag.a{background:rgba(245,158,11,0.12);color:var(--gold2)}
+.itag.b{background:rgba(52,211,153,0.12);color:#6ee7b7}
+.itag.c{background:rgba(99,102,241,0.12);color:#a5b4fc}
+.output-demo{
+  margin-top:14px;padding:14px 16px;
+  background:rgba(16,185,129,0.04);border:1px solid rgba(16,185,129,0.15);border-radius:10px;
+}
+.od-label{font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--t3);margin-bottom:6px;text-transform:uppercase}
+.od-text{font-size:13px;color:var(--green3);line-height:1.7;font-style:italic}
+.emotion-table{width:100%;border-collapse:collapse}
+.emotion-table th{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--t3);padding:0 0 10px;text-align:left}
+.emotion-table td{font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);color:var(--t2)}
+.emotion-table td:first-child{color:var(--gold2);font-weight:700;white-space:nowrap;padding-right:16px}
+/* S3 PIPELINE */
+.s3-wrap{width:100%;max-width:1020px}
+.pipeline{display:flex;gap:10px;margin-top:28px;align-items:stretch}
+.pstep{
+  flex:1;padding:18px 14px;border-radius:14px;
+  background:var(--card);border:1px solid var(--border);
+  position:relative;overflow:hidden;text-align:center;
+}
+.pstep::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--pc,rgba(245,158,11,.4)),transparent);
+}
+.pstep.p1{--pc:rgba(245,158,11,.5)}
+.pstep.p2{--pc:rgba(16,185,129,.4)}
+.pstep.p3{--pc:rgba(168,85,247,.4)}
+.pstep.p4{--pc:rgba(245,158,11,.5)}
+.pstep-num{font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--t3);margin-bottom:6px}
+.pstep-icon{font-size:26px;margin-bottom:8px}
+.pstep-title{font-size:13px;font-weight:700;color:var(--t1);margin-bottom:6px}
+.pstep-items{display:flex;flex-direction:column;gap:3px}
+.pitem{font-size:11px;color:var(--t2);line-height:1.4}
+.parr{font-size:18px;color:var(--t3);flex-shrink:0;align-self:center}
+/* S4 OUTPUT */
+.s4-wrap{width:100%;max-width:900px}
+.output-showcase{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:28px}
+.ocard{
+  padding:22px 20px;border-radius:16px;
+  background:var(--card);border:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.ocard::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--oc,.4),transparent);
+}
+.ocard.o1{--oc:rgba(245,158,11,.5)}
+.ocard.o2{--oc:rgba(99,102,241,.4)}
+.ocard-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:12px}
+.ocard-title{font-size:18px;font-weight:700;color:var(--t1);margin-bottom:8px}
+.ocard-desc{font-size:13px;color:var(--t2);line-height:1.6}
+.color-dots{display:flex;gap:6px;margin-top:14px}
+.cdot{width:20px;height:20px;border-radius:50%}
+.spec-list{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.spec-row{display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.spec-k{color:var(--t3)}
+.spec-v{color:var(--green3);font-weight:600}
+/* S5 MARKET */
+.s5-wrap{width:100%;max-width:900px}
+.market-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
+.mcard{
+  padding:22px 18px;border-radius:16px;text-align:center;
+  background:var(--card);border:1px solid var(--border);
+}
+.mcard-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
+.mcard-num{
+  font-size:40px;font-weight:900;line-height:1;
+  background:linear-gradient(135deg,var(--gold2),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;
+}
+.mcard-unit{font-size:12px;color:var(--t2)}
+.market-note{
+  margin-top:20px;padding:16px 22px;border-radius:12px;
+  background:var(--card);border:1px solid var(--border);
+  font-size:14px;color:var(--t2);line-height:1.7;text-align:center;
+}
+.market-note b{color:var(--gold2)}
+/* S6 ROADMAP */
+.s6-wrap{width:100%;max-width:840px}
+.timeline{margin-top:26px;display:flex;flex-direction:column}
+.trow{display:flex;gap:18px;align-items:stretch;padding:0 0 22px}
+.trow:last-child{padding-bottom:0}
+.t-line{display:flex;flex-direction:column;align-items:center;width:32px;flex-shrink:0}
+.t-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.t-dot.done{background:var(--gold)}
+.t-dot.now{background:var(--green);box-shadow:0 0 10px rgba(16,185,129,.6)}
+.t-dot.next{background:var(--t3);border:1px solid var(--border)}
+.t-vline{flex:1;width:1px;background:var(--border);margin:4px 0}
+.trow:last-child .t-vline{display:none}
+.t-phase{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.t-phase.done{color:var(--gold)}
+.t-phase.now{color:var(--green3)}
+.t-phase.next{color:var(--t3)}
+.t-title{font-size:16px;font-weight:700;color:var(--t1);margin-bottom:5px}
+.t-items{display:flex;gap:7px;flex-wrap:wrap}
+.titem{padding:3px 10px;border-radius:100px;font-size:12px;background:var(--card);border:1px solid var(--border);color:var(--t2)}
+/* S7 CLOSE */
+.s7-glow{
+  position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 65% 55% at 50% 50%,rgba(245,158,11,0.09) 0%,transparent 65%);
+}
+.s7-trophy{font-size:70px;margin-bottom:18px;line-height:1;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.s7-title{
+  font-size:clamp(42px,5.5vw,64px);font-weight:900;letter-spacing:-1.5px;line-height:1.1;
+  background:linear-gradient(135deg,#f0fdf4 0%,var(--green3) 30%,var(--gold2) 60%,var(--gold) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:14px;
+}
+.s7-sub{font-size:17px;color:var(--t2);font-weight:300;letter-spacing:.06em;margin-bottom:32px}
+.s7-cta{
+  display:inline-flex;align-items:center;gap:10px;padding:14px 36px;border-radius:100px;
+  background:linear-gradient(135deg,var(--gold),#f97316);
+  color:#1c0a00;font-size:18px;font-weight:800;letter-spacing:.04em;
+  box-shadow:0 6px 28px rgba(245,158,11,.4);
+}
+</style>
+</head>
+<body>
+<div class="deck">
+
+<!-- S1 COVER -->
+<div class="slide active" id="s1">
+  <div class="s1-glow"></div>
+  <div class="slide-label">WorldCup 2026 · AI Hackathon</div>
+  <div class="s1-tagline">三个参数，让 AI 为每场比赛写出另一种命运</div>
+  <div class="s1-title">平行宇宙<br>叙事Agent</div>
+  <div class="s1-sub">微小说 · 联网赛况 · 情绪驱动多模态长图</div>
+  <div class="s1-tags">
+    <div class="s1-tag">⚽ <b>48国</b> 参战</div>
+    <div class="s1-tag">📖 <b>≤300字</b> 微小说</div>
+    <div class="s1-tag">🖼️ <b>1:1 & 9:16</b> 长图直出</div>
+  </div>
+</div>
+
+<!-- S2 WHAT IS IT -->
+<div class="slide" id="s2">
+  <div class="s2-wrap">
+    <div class="slide-label">产品是什么 · WHAT IT DOES</div>
+    <div class="slide-title green">输入三个参数<br>世界杯有了第二种结局</div>
+    <div class="s2-grid">
+      <div class="s2-side">
+        <h3>输入 · 三元组协议</h3>
+        <div class="input-demo">
+          <div class="row">
+            <span class="itag a">梅西</span>
+            <span class="itag b">绝杀进球</span>
+            <span class="itag c">情绪强度 9</span>
+          </div>
+          <div class="output-demo">
+            <div class="od-label">AI 输出 · 微小说节选</div>
+            <div class="od-text">"第89分钟，他停下来——不是因为腿沉，而是因为他突然记起了多年前第一次穿上10号球衣的那个傍晚……"</div>
+          </div>
+        </div>
+      </div>
+      <div class="s2-side">
+        <h3>情绪强度路由规则</h3>
+        <table class="emotion-table">
+          <tr><th>情绪强度</th><th>叙事视角</th></tr>
+          <tr><td>≥ 8</td><td>第一人称热血独白，高密度感官意象</td></tr>
+          <tr><td>5 – 7</td><td>伪纪实，第三人称限知，新闻笔法夹叙事</td></tr>
+          <tr><td>< 5</td><td>纯第三人称冷峻，疏离感，克制白描</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S3 PIPELINE -->
+<div class="slide" id="s3">
+  <div class="s3-wrap">
+    <div class="slide-label">技术管线 · 10步工作流</div>
+    <div class="slide-title grad">从三元组到长图<br>全链路自动化</div>
+    <div class="pipeline">
+      <div class="pstep p1">
+        <div class="pstep-num">PHASE 1</div>
+        <div class="pstep-icon">🧩</div>
+        <div class="pstep-title">意图解构</div>
+        <div class="pstep-items">
+          <div class="pitem">解析冲突原型</div>
+          <div class="pitem">锁定体裁契约</div>
+          <div class="pitem">路由叙事视角</div>
+        </div>
+      </div>
+      <div class="parr">→</div>
+      <div class="pstep p2">
+        <div class="pstep-num">PHASE 2</div>
+        <div class="pstep-icon">🔍</div>
+        <div class="pstep-title">联网检索</div>
+        <div class="pstep-items">
+          <div class="pitem">赛况事实双路搜索</div>
+          <div class="pitem">在地文化细节</div>
+          <div class="pitem">置信度评分</div>
+        </div>
+      </div>
+      <div class="parr">→</div>
+      <div class="pstep p3">
+        <div class="pstep-num">PHASE 3</div>
+        <div class="pstep-icon">✍️</div>
+        <div class="pstep-title">创意生产</div>
+        <div class="pstep-items">
+          <div class="pitem">≤300字微小说</div>
+          <div class="pitem">安全合规审计</div>
+          <div class="pitem">Reflexion自评闭环</div>
+        </div>
+      </div>
+      <div class="parr">→</div>
+      <div class="pstep p4">
+        <div class="pstep-num">PHASE 4</div>
+        <div class="pstep-icon">🖼️</div>
+        <div class="pstep-title">多模态交付</div>
+        <div class="pstep-items">
+          <div class="pitem">情绪→色彩/字重映射</div>
+          <div class="pitem">1:1 & 9:16 长图</div>
+          <div class="pitem">溯源元数据</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S4 OUTPUT -->
+<div class="slide" id="s4">
+  <div class="s4-wrap">
+    <div class="slide-label">产品输出 · DELIVERABLES</div>
+    <div class="slide-title green">每次创作，交付三件事</div>
+    <div class="output-showcase" style="grid-template-columns:1fr 1fr 1fr">
+      <div class="ocard o1">
+        <div class="ocard-label">文字输出</div>
+        <div class="ocard-title">≤300字 微小说正文</div>
+        <div class="ocard-desc">严格三幕结构，情绪弧线拟合度≥0.7，所有低置信度赛事细节自动模糊化，标注"AI创意叙事"</div>
+        <div class="color-dots">
+          <div class="cdot" style="background:#F59E0B"></div>
+          <div class="cdot" style="background:#1d4ed8"></div>
+          <div class="cdot" style="background:#7c3aed"></div>
+          <div style="font-size:11px;color:var(--t2);align-self:center;margin-left:4px">情绪驱动配色</div>
+        </div>
+      </div>
+      <div class="ocard o2">
+        <div class="ocard-label">图片输出</div>
+        <div class="ocard-title">双版面长图</div>
+        <div class="spec-list">
+          <div class="spec-row"><span class="spec-k">1:1 方图</span><span class="spec-v">1024×1024</span></div>
+          <div class="spec-row"><span class="spec-k">9:16 竖版</span><span class="spec-v">1024×1820</span></div>
+          <div class="spec-row"><span class="spec-k">适配渠道</span><span class="spec-v">朋友圈 · 小红书 · Story</span></div>
+        </div>
+      </div>
+      <div class="ocard" style="--oc:rgba(16,185,129,.4)">
+        <div class="ocard-label">质量元数据</div>
+        <div class="ocard-title">溯源 & 质检报告</div>
+        <div class="spec-list">
+          <div class="spec-row"><span class="spec-k">事实来源</span><span class="spec-v">联网检索溯源</span></div>
+          <div class="spec-row"><span class="spec-k">人设漂移 σ</span><span class="spec-v">≤ 0.30</span></div>
+          <div class="spec-row"><span class="spec-k">情绪弧线拟合</span><span class="spec-v">≥ 0.70</span></div>
+          <div class="spec-row"><span class="spec-k">质量状态</span><span class="spec-v">passed / degraded</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S5 MARKET -->
+<div class="slide" id="s5">
+  <div class="s5-wrap">
+    <div class="slide-label">市场规模 · MARKET SIZE</div>
+    <div class="slide-title grad">世界杯是地球上最大的叙事市场</div>
+    <div class="market-grid">
+      <div class="mcard">
+        <div class="mcard-label">全球球迷</div>
+        <div class="mcard-num">50亿</div>
+        <div class="mcard-unit">世界杯潜在受众</div>
+      </div>
+      <div class="mcard">
+        <div class="mcard-label">赛事内容市场</div>
+        <div class="mcard-num">$25B</div>
+        <div class="mcard-unit">全球体育数字内容规模</div>
+      </div>
+      <div class="mcard">
+        <div class="mcard-label">中国球迷</div>
+        <div class="mcard-num">3亿</div>
+        <div class="mcard-unit">核心目标用户池</div>
+      </div>
+    </div>
+    <div class="market-note">
+      世界杯窗口：<b>64场 × 48天</b>，每场都产生海量"假设"与"情绪爆发点"<br>
+      这是史上最密集的 <b>AI体育叙事内容需求窗口</b>
+    </div>
+  </div>
+</div>
+
+<!-- S6 ROADMAP -->
+<div class="slide" id="s6">
+  <div class="s6-wrap">
+    <div class="slide-label">里程碑 · ROADMAP</div>
+    <div class="slide-title green">从黑客松原型到世界杯正式上线</div>
+    <div class="timeline">
+      <div class="trow">
+        <div class="t-line"><div class="t-dot done"></div><div class="t-vline"></div></div>
+        <div>
+          <div class="t-phase done">DONE · 2026.06</div>
+          <div class="t-title">黑客松原型完成</div>
+          <div class="t-items">
+            <span class="titem">三元组意图引擎</span>
+            <span class="titem">10步创作管线</span>
+            <span class="titem">双版面长图输出</span>
+          </div>
+        </div>
+      </div>
+      <div class="trow">
+        <div class="t-line"><div class="t-dot now"></div><div class="t-vline"></div></div>
+        <div>
+          <div class="t-phase now">NOW · 2026.07</div>
+          <div class="t-title">世界杯小组赛同步上线</div>
+          <div class="t-items">
+            <span class="titem">实时赛况接入</span>
+            <span class="titem">社交一键分享</span>
+            <span class="titem">用户收藏/再创作</span>
+          </div>
+        </div>
+      </div>
+      <div class="trow">
+        <div class="t-line"><div class="t-dot next"></div><div class="t-vline"></div></div>
+        <div>
+          <div class="t-phase next">NEXT · 2026.08</div>
+          <div class="t-title">决赛阶段商业化</div>
+          <div class="t-items">
+            <span class="titem">媒体B端内容授权</span>
+            <span class="titem">创作者付费工坊</span>
+            <span class="titem">多语言扩展</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S7 CLOSE -->
+<div class="slide" id="s7" style="text-align:center">
+  <div class="s7-glow"></div>
+  <div class="s7-trophy">🏆</div>
+  <div class="slide-label">WHY US · 为什么是我们</div>
+  <div class="s7-title">每场比赛都有<br>第二种可能</div>
+  <div class="s7-sub">平行宇宙叙事Agent · 让球迷成为历史的改写者</div>
+  <a class="s7-cta" href="https://aifootball.hub.tutucat.icu/" target="_blank" style="text-decoration:none">⚽ 立即体验 · Try Now</a>
+</div>
+
+<div class="nav" id="nav"></div>
+<div class="slide-num" id="slideNum">1 / 7</div>
+<div class="nav-hint">← → 键翻页</div>
+
+<script>
+const slides=document.querySelectorAll('.slide');
+const nav=document.getElementById('nav');
+const numEl=document.getElementById('slideNum');
+let cur=0;
+function buildNav(){
+  nav.innerHTML='';
+  slides.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='dot'+(i===cur?' active':'');
+    d.onclick=()=>go(i);
+    nav.appendChild(d);
+  });
+}
+function go(n){
+  if(n<0||n>=slides.length)return;
+  slides[cur].classList.remove('active');
+  slides[cur].classList.add('exit-left');
+  setTimeout(()=>slides[cur].classList.remove('exit-left'),420);
+  cur=n;
+  slides[cur].classList.add('active');
+  numEl.textContent=(cur+1)+' / '+slides.length;
+  buildNav();
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')go(cur+1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(cur-1);
+});
+let tx=0;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX});
+document.addEventListener('touchend',e=>{
+  const dx=tx-e.changedTouches[0].clientX;
+  if(Math.abs(dx)>40){dx>0?go(cur+1):go(cur-1)}
+});
+buildNav();
+</script>
+</div>
+</body>
+</html>
