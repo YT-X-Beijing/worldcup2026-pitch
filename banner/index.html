@@ -18,11 +18,13 @@ html,body{
   margin:0;padding:0;
 }
 @media print{
+  @page{size:A4;margin:0}
   html,body{margin:0;padding:0}
-  .banner{box-shadow:none;page-break-inside:avoid}
+  .banner{box-shadow:none;transform-origin:top left;
+    transform:scale(calc(210mm / 794px));width:794px!important;height:auto!important}
 }
 .banner{
-  width:794px;height:1123px;margin:0 auto;
+  width:794px;min-height:1123px;margin:0 auto;
   display:flex;flex-direction:column;
   background:
     radial-gradient(ellipse 80% 40% at 50% 0%,rgba(16,185,129,0.12) 0%,transparent 60%),
